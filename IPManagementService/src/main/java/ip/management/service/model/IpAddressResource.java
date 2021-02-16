@@ -1,5 +1,7 @@
 package ip.management.service.model;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import ip.management.service.enums.IpResourceState;
+import ip.management.service.exception.IpAddressOutOfRangeException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -33,6 +36,20 @@ public class IpAddressResource {
 
 	@OneToOne
 	@JoinColumn(name = "ip_pool_id")
-	private IpPoolResource ipAddress;
+	private IpPoolResource ipPool;
+
+	public IpAddressResource(IpPoolResource ipPool, String ipAddressValue, IpResourceState ipStatus) {
+		Objects.requireNonNull(ipPool, "IpPool's information cannot be null!");
+		Objects.requireNonNull(ipAddressValue, "IP Address Value cannot be null!");
+		this.ipPool = ipPool;
+		if (this.ipPool.validateIpAvailabeInPool(ipAddressValue)) {
+			throw new IpAddressOutOfRangeException("Given IP Address is not availabe in range!");
+		}
+		this.value = ipAddressValue;
+		this.status = ipStatus;
+
+	}
+
+	
 
 }
