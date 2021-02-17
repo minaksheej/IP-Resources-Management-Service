@@ -18,8 +18,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import ip.management.service.dto.GeneratedIPDto;
+import ip.management.service.dto.IpAddressReponse;
 import ip.management.service.dto.IpAddressRequest;
-import ip.management.service.model.IpAddressResource;
 
 public interface IpManagementAPI {
 
@@ -35,7 +35,7 @@ public interface IpManagementAPI {
 	@Operation(summary = "save IP Addresses based on status ", description = "select action  as 'reserve', 'blacklist'  or  'free'" , tags = {
 	"IP-Management" })
 	@RequestMapping(value = "/ipaddres", method = RequestMethod.POST)
-	ResponseEntity<List<IpAddressResource>> saveIpAddress(
+	ResponseEntity<List<IpAddressReponse>> saveIpAddress(
 			@io.swagger.v3.oas.annotations.Parameter(in = ParameterIn.QUERY) @RequestParam String action,
 			@RequestBody IpAddressRequest ipAddressRequest);
 	
@@ -45,7 +45,7 @@ public interface IpManagementAPI {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = GeneratedIPDto.class)))) })
 	@RequestMapping(value = "/ipaddress", produces = { "application/json" }, method = RequestMethod.GET)
-	ResponseEntity<IpAddressResource> findIpAddresses(
+	ResponseEntity<IpAddressReponse> findIpAddresses(
 			@Min(1L) @io.swagger.v3.oas.annotations.Parameter(in = ParameterIn.QUERY) @RequestParam Long ipPoolId,
 			@io.swagger.v3.oas.annotations.Parameter(in = ParameterIn.QUERY) @RequestParam String ipAddress);
 }
