@@ -76,11 +76,14 @@ public class IpPoolResource {
 		return ipBounddArray;
 	}
 
-	public List<String> generateIps(long noOfIpAddresses) {
+	public List<String> generateIps(Integer noOfIpAddresses) {
 		List<String> generatedIpList = new ArrayList<>();
-		for (int ipNumber = 0; ipNumber < noOfIpAddresses; ipNumber++) {
-			InetAddress addresses = InetAddresses.forString(this.lowerBound);
-			generatedIpList.add(InetAddresses.toAddrString(InetAddresses.increment(addresses)));
+		InetAddress addresses = InetAddresses.forString(this.lowerBound);
+		generatedIpList.add(InetAddresses.toAddrString(addresses));
+		for (int ipNumber = 0; ipNumber < noOfIpAddresses-1; ipNumber++) {
+			InetAddress incrementedAddress = InetAddresses.increment(addresses);
+			addresses=incrementedAddress;
+			generatedIpList.add(InetAddresses.toAddrString(incrementedAddress));
 		}
 
 		return generatedIpList;
@@ -88,20 +91,20 @@ public class IpPoolResource {
 	}
 
 	public boolean validateIpAvailabeInPool(String ipAddress) {
-		return new IpRangeCalculator<InetAddress>(InetAddresses.forString(this.lowerBound),
+		return (new IpRangeCalculator<InetAddress>(InetAddresses.forString(this.lowerBound),
 				InetAddresses.forString(this.upperBound), IpAddressComparator.INSTANCE)
-						.contains(InetAddresses.forString(ipAddress));
+						.contains(InetAddresses.forString(ipAddress))) && (this.usedCapacity!=this.totalCapacity);
 
 	}
 
 	public void take() {
 		this.lowerBound = InetAddresses.toAddrString(InetAddresses.increment(InetAddresses.forString(this.lowerBound)));
-		this.usedCapacity=usedCapacity+1;
+		this.usedCapacity = usedCapacity + 1;
 	}
-	
-	public void  returnIpAddress() {
+
+	public void returnIpAddress() {
 		this.lowerBound = InetAddresses.toAddrString(InetAddresses.decrement(InetAddresses.forString(this.lowerBound)));
-		this.usedCapacity=usedCapacity-1;
+		this.usedCapacity = usedCapacity - 1;
 
 	}
 }

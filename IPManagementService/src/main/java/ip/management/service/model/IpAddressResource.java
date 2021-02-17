@@ -1,5 +1,6 @@
 package ip.management.service.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -22,10 +23,15 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @ToString
-public class IpAddressResource {
+public class IpAddressResource implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6151050930748499582L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 
 	@Column(name = "ip_value")
@@ -42,14 +48,18 @@ public class IpAddressResource {
 		Objects.requireNonNull(ipPool, "IpPool's information cannot be null!");
 		Objects.requireNonNull(ipAddressValue, "IP Address Value cannot be null!");
 		this.ipPool = ipPool;
-		if (this.ipPool.validateIpAvailabeInPool(ipAddressValue)) {
+		if (!(this.ipPool.validateIpAvailabeInPool(ipAddressValue))) {
 			throw new IpAddressOutOfRangeException("Given IP Address is not availabe in range!");
 		}
+		ipPool.take();
 		this.value = ipAddressValue;
 		this.status = ipStatus;
 
 	}
 
-	
+	public void returnIpAddress() {
+		this.status = IpResourceState.FREE;
+		this.ipPool.returnIpAddress();
+	}
 
 }
