@@ -15,7 +15,6 @@ import io.swagger.v3.oas.models.servers.Server;
 @SpringBootApplication
 public class IpManagementSreviceApplication {
 
-	private static final String HTTP_LOCALHOST = "http://localhost:8080";
 
 	public static void main(String[] args) {
 		SpringApplication.run(IpManagementSreviceApplication.class, args);
@@ -30,7 +29,7 @@ public class IpManagementSreviceApplication {
 	@Bean
 	public OpenAPI customOpenAPI(@Value("${application-description}") String appDesciption,
 			@Value("${application-version}") String appVersion) {
-		return new OpenAPI().addServersItem(new Server().url(HTTP_LOCALHOST).description("Local Server URL"))
+		return new OpenAPI().addServersItem(new Server().url("http://localhost:8080").description("Local Server URL"))
 				.components(new Components().addSecuritySchemes("basicScheme",
 						new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic")))
 				.info(new Info().title("Video Rental API").version(appVersion).description(appDesciption)

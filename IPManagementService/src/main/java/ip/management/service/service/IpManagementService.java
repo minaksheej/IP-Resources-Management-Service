@@ -2,8 +2,6 @@ package ip.management.service.service;
 
 import java.util.List;
 
-import javax.validation.constraints.Min;
-
 import ip.management.service.dto.IpAddressRequest;
 import ip.management.service.model.IpAddressResource;
 
