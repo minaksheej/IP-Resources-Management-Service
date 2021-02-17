@@ -30,7 +30,7 @@ public interface IpManagementAPI {
 	@RequestMapping(value = "/generate", produces = { "application/json" }, method = RequestMethod.GET)
 	ResponseEntity<List<String>> generateIpAddresses(
 			@Min(1L) @io.swagger.v3.oas.annotations.Parameter(in = ParameterIn.QUERY) @RequestParam Long ipPoolId,
-			@io.swagger.v3.oas.annotations.Parameter(in = ParameterIn.QUERY) @RequestParam Integer noOfIpAddress);
+			@io.swagger.v3.oas.annotations.Parameter(in = ParameterIn.QUERY) @RequestParam Integer noOfIPAddress);
 
 	@Operation(summary = "save IP Addresses based on status ", description = "select action  as 'reserve', 'blacklist'  or  'free'" , tags = {
 	"IP-Management" })

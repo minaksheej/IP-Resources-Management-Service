@@ -36,7 +36,7 @@ public class IpManagementServiceImpl implements IpManagementService {
 	public IpAddressResource findIpAddress(Long ipPoolId, String ipAddress) {
 		final IpPoolResource ipPool = findIpPool(ipPoolId);
 
-		return this.ipAddressRepository.findByValueAndIpPool(ipAddress, ipPool)
+		return this.ipAddressRepository.findByValueAndIpPool(new String(ipAddress), ipPool)
 				.orElseThrow(() -> new IpAddressNotFoundException(
 						String.format("ipAddress with value '%d' doesn't exist", ipAddress)));
 	}
